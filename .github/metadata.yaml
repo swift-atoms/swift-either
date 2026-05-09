@@ -1,0 +1,8 @@
+# .github/metadata.yaml
+description: "The Either binary coproduct type for typed sum values in Swift."
+topics:
+  - primitives
+  - coproduct
+  - data-structures
+  - type-safety
+homepage: "https://swift-institute.org"
