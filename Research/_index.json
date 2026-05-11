@@ -24,6 +24,14 @@
       "status": "DECISION",
       "tier": 1,
       "scope": "package"
+    },
+    {
+      "file": "future-directions.md",
+      "displayName": "Either — Future Directions",
+      "topic": "future directions",
+      "status": "RECOMMENDATION",
+      "tier": 2,
+      "scope": "cross-package"
     }
   ]
 }

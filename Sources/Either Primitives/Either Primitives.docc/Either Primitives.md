@@ -54,3 +54,7 @@ lifetime tied to the borrowed receiver.
 ### The Coproduct
 
 - ``Either_Primitives/Either``
+
+### Positioning
+
+- <doc:Either-Result-and-Typed-Throws>
