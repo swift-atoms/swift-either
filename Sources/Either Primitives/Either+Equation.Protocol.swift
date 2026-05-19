@@ -8,6 +8,7 @@
 // Equatable where Left: Equatable, Right: Equatable {}` in `Either.swift`
 // is therefore guarded `#if swift(<6.4)` to avoid duplicate-conformance.
 
+#if swift(<6.4)
 extension Either: Equation.`Protocol`
 where
     Left: Equation.`Protocol` & ~Copyable & ~Escapable,
@@ -47,3 +48,35 @@ where
         }
     }
 }
+#else
+// Swift 6.4+: Equation.Protocol = Swift.Equatable. Drops ~Escapable arm.
+extension Either: Equation.`Protocol`
+where
+    Left: Equation.`Protocol` & ~Copyable,
+    Right: Equation.`Protocol` & ~Copyable
+{
+    @inlinable
+    @_disfavoredOverload
+    public static func == (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
+        switch lhs {
+        case .left(let lLeft):
+            switch rhs {
+            case .left(let rLeft):
+                return lLeft == rLeft
+
+            case .right:
+                return false
+            }
+
+        case .right(let lRight):
+            switch rhs {
+            case .left:
+                return false
+
+            case .right(let rRight):
+                return lRight == rRight
+            }
+        }
+    }
+}
+#endif

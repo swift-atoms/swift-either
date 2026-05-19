@@ -11,6 +11,7 @@
 // Hash.Protocol refines Equation.Protocol; the sibling Equation
 // conformance in this same target supplies the inherited conformance.
 
+#if swift(<6.4)
 extension Either: Hash.`Protocol`
 where
     Left: Hash.`Protocol` & ~Copyable & ~Escapable,
@@ -41,3 +42,25 @@ where
         }
     }
 }
+#else
+// Swift 6.4+: Hash.Protocol = Swift.Hashable. Drops ~Escapable arm.
+extension Either: Hash.`Protocol`
+where
+    Left: Hash.`Protocol` & ~Copyable,
+    Right: Hash.`Protocol` & ~Copyable
+{
+    @inlinable
+    @_disfavoredOverload
+    public borrowing func hash(into hasher: inout Hasher) {
+        switch self {
+        case .left(let left):
+            hasher.combine(0 as UInt8)
+            left.hash(into: &hasher)
+
+        case .right(let right):
+            hasher.combine(1 as UInt8)
+            right.hash(into: &hasher)
+        }
+    }
+}
+#endif
