@@ -21,7 +21,7 @@ let package = Package(
         .package(url: "https://github.com/swift-primitives/swift-equation-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-hash-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-comparison-primitives.git", branch: "main"),
-        .package(path: "../swift-standard-library-extensions"),
+        .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", branch: "main"),
     ],
     targets: [
         .target(
