@@ -43,8 +43,13 @@ where
     }
 }
 #else
-// Swift 6.4+: Hash.Protocol = Swift.Hashable. Drops ~Escapable arm.
-extension Either: Hash.`Protocol`
+// Swift 6.4+: Hash.Protocol REFINES Swift.Hashable (typed hashValue). A conditional
+// conformance to it does not synthesize the inherited Swift.Hashable, so declare it
+// explicitly with the hash(into:) witness; the Hash.Protocol conformance is then empty
+// (typed hashValue defaulted in hash-primitives). Equatable comes from the sibling
+// Equation.Protocol conformance (still a Swift.Equatable typealias).
+// Ref: Research/se-0499-…md Addendum (2026-06-01).
+extension Either: Swift.Hashable
 where
     Left: Hash.`Protocol` & ~Copyable,
     Right: Hash.`Protocol` & ~Copyable
@@ -63,4 +68,10 @@ where
         }
     }
 }
+
+extension Either: Hash.`Protocol`
+where
+    Left: Hash.`Protocol` & ~Copyable,
+    Right: Hash.`Protocol` & ~Copyable
+{}
 #endif
