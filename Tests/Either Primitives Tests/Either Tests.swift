@@ -10,21 +10,30 @@ import Testing
 
 @Suite
 struct `Either Tests` {
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+    @Suite(.serialized) struct Performance {}
+}
+
+// MARK: - Unit sub-suites
+
+extension `Either Tests`.Unit {
     @Suite struct Construction {}
     @Suite struct Map {}
-    @Suite struct FlatMap {}
+    @Suite struct `Flat Map` {}
     @Suite struct Fold {}
     @Suite struct Swap {}
     @Suite struct Accessors {}
-    @Suite struct NeverElimination {}
+    @Suite struct `Never Elimination` {}
     @Suite struct Conformances {}
-    @Suite struct InstituteIntegration {}
-    @Suite struct ConsumingVariants {}
+    @Suite struct `Institute Integration` {}
+    @Suite struct `Consuming Variants` {}
 }
 
 // MARK: - Construction
 
-extension `Either Tests`.Construction {
+extension `Either Tests`.Unit.Construction {
 
     @Test
     func `left case stores its payload`() {
@@ -49,7 +58,7 @@ extension `Either Tests`.Construction {
 
 // MARK: - Map (right)
 
-extension `Either Tests`.Map {
+extension `Either Tests`.Unit.Map {
 
     @Test
     func `map(right:) preserves left case`() {
@@ -168,7 +177,7 @@ extension `Either Tests`.Map {
 
 // MARK: - FlatMap
 
-extension `Either Tests`.FlatMap {
+extension `Either Tests`.Unit.`Flat Map` {
 
     @Test
     func `flatMap(right:) preserves left case`() {
@@ -273,7 +282,7 @@ extension `Either Tests`.FlatMap {
 
 // MARK: - Fold
 
-extension `Either Tests`.Fold {
+extension `Either Tests`.Unit.Fold {
 
     @Test
     func `fold collapses left case`() {
@@ -322,7 +331,7 @@ extension `Either Tests`.Fold {
 
 // MARK: - Swap
 
-extension `Either Tests`.Swap {
+extension `Either Tests`.Unit.Swap {
 
     @Test
     func `swapped exchanges left and right`() {
@@ -427,7 +436,7 @@ extension `Either Tests`.Swap {
 
 // MARK: - Accessors
 
-extension `Either Tests`.Accessors {
+extension `Either Tests`.Unit.Accessors {
 
     @Test
     func `left accessor returns Some on .left`() {
@@ -446,7 +455,7 @@ extension `Either Tests`.Accessors {
 
 // MARK: - Never elimination
 
-extension `Either Tests`.NeverElimination {
+extension `Either Tests`.Unit.`Never Elimination` {
 
     @Test
     func `Either where Right == Never extracts left as value`() {
@@ -562,7 +571,7 @@ extension `Either Tests`.NeverElimination {
 
 // MARK: - Conformances
 
-extension `Either Tests`.Conformances {
+extension `Either Tests`.Unit.Conformances {
 
     @Test
     func `Either is Equatable when both arms are Equatable`() {
@@ -634,23 +643,11 @@ extension `Either Tests`.Conformances {
 
 // MARK: - Institute Integration
 
-extension `Either Tests`.InstituteIntegration {
+extension `Either Tests`.Unit.`Institute Integration` {
 
     // ~Copyable Equation.Protocol-conformer used across the integration tests.
-    struct Probe: ~Copyable, Equation.`Protocol`, Hash.`Protocol`, Comparison.`Protocol` {
+    struct Probe: ~Copyable {
         let id: Int
-
-        static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
-            lhs.id == rhs.id
-        }
-
-        static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
-            lhs.id < rhs.id
-        }
-
-        borrowing func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-        }
     }
 
     @Test
@@ -755,9 +752,29 @@ extension `Either Tests`.InstituteIntegration {
     }
 }
 
+// MARK: - Probe institute-protocol conformances
+
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Equation.`Protocol` {
+    static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Comparison.`Protocol` {
+    static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
+        lhs.id < rhs.id
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash.`Protocol` {
+    borrowing func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 // MARK: - Institute Integration on ~Copyable & ~Escapable arms
 
-extension `Either Tests`.InstituteIntegration {
+extension `Either Tests`.Unit.`Institute Integration` {
 
     // ~Copyable & ~Escapable institute-protocol-conformer for the mixed-suppression integration tests.
     struct Cell: ~Copyable, ~Escapable {
@@ -815,19 +832,19 @@ extension `Either Tests`.InstituteIntegration {
     }
 }
 
-extension `Either Tests`.InstituteIntegration.Cell: Equation.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Equation.`Protocol` {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either Tests`.InstituteIntegration.Cell: Hash.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Hash.`Protocol` {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension `Either Tests`.InstituteIntegration.Cell: Comparison.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Comparison.`Protocol` {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }
@@ -835,7 +852,7 @@ extension `Either Tests`.InstituteIntegration.Cell: Comparison.`Protocol` {
 
 // MARK: - Consuming variants for ~Copyable arms
 
-extension `Either Tests`.ConsumingVariants {
+extension `Either Tests`.Unit.`Consuming Variants` {
 
     /// `~Copyable` resource type used to validate consuming-method behaviour.
     struct Resource: ~Copyable {

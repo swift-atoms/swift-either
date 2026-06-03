@@ -10,8 +10,17 @@ import Testing
 
 @Suite
 struct `Either StandardLibraryExtensions Result Tests` {
-    @Suite struct CopyableSuccess {}
-    @Suite struct NoncopyableSuccess {}
+    @Suite struct Unit {}
+    @Suite struct `Edge Case` {}
+    @Suite struct Integration {}
+    @Suite(.serialized) struct Performance {}
+}
+
+// MARK: - Unit sub-suites
+
+extension `Either StandardLibraryExtensions Result Tests`.Unit {
+    @Suite struct `Copyable Success` {}
+    @Suite struct `Noncopyable Success` {}
 }
 
 // MARK: - Fixtures
@@ -27,7 +36,7 @@ private struct InteropResource: ~Copyable {
 
 // MARK: - Copyable success path
 
-extension `Either StandardLibraryExtensions Result Tests`.CopyableSuccess {
+extension `Either StandardLibraryExtensions Result Tests`.Unit.`Copyable Success` {
 
     @Test
     func `Result.success projects to Either.right`() {
@@ -87,12 +96,12 @@ extension `Either StandardLibraryExtensions Result Tests`.CopyableSuccess {
 
     @Test
     func `Either(SLE.Result) is usable as a Swift_Error coproduct`() {
-        struct OtherError: Swift.Error, Equatable {}
-        // The Either<InteropError, OtherError> case witnesses that the
+        struct Fault: Swift.Error, Equatable {}
+        // The Either<InteropError, Fault> case witnesses that the
         // converted Either composes with `throws(Either<...>)` sites.
-        let result: Standard_Library_Extensions.Result<OtherError, InteropError> =
+        let result: Standard_Library_Extensions.Result<Fault, InteropError> =
             .failure(InteropError(code: 3))
-        let either: Either<InteropError, OtherError> = Either(result)
+        let either: Either<InteropError, Fault> = Either(result)
         guard case .left(let err) = either else {
             Issue.record("expected .left from upstream failure")
             return
@@ -100,10 +109,10 @@ extension `Either StandardLibraryExtensions Result Tests`.CopyableSuccess {
         #expect(err.code == 3)
         // Confirm the conditional Swift.Error conformance applies — i.e.,
         // the Either is throwable.
-        func throwIt(_ e: Either<InteropError, OtherError>) throws(Either<InteropError, OtherError>) {
+        func throwIt(_ e: Either<InteropError, Fault>) throws(Either<InteropError, Fault>) {
             throw e
         }
-        do throws(Either<InteropError, OtherError>) {
+        do throws(Either<InteropError, Fault>) {
             try throwIt(either)
             Issue.record("expected throw")
         } catch {
@@ -118,7 +127,7 @@ extension `Either StandardLibraryExtensions Result Tests`.CopyableSuccess {
 
 // MARK: - Noncopyable success path
 
-extension `Either StandardLibraryExtensions Result Tests`.NoncopyableSuccess {
+extension `Either StandardLibraryExtensions Result Tests`.Unit.`Noncopyable Success` {
 
     @Test
     func `Result.success with ~Copyable Success projects to Either.right`() {
