@@ -14,70 +14,72 @@
 // the same case, payloads are compared.
 
 #if swift(<6.4)
-extension Either: Comparison.`Protocol`
-where
-    Left: Comparison.`Protocol` & ~Copyable & ~Escapable,
-    Right: Comparison.`Protocol` & ~Copyable & ~Escapable
-{
-    /// Returns whether the left-hand side either is less than the right-hand
-    /// side under the lexicographic ordering: `.left(_) < .right(_)` for any
-    /// payloads, with payloads compared within a matching case.
-    ///
-    /// - Note: Uses `@_disfavoredOverload` so the stdlib `Swift.Comparable`
-    ///   conformance is preferred when both arms are Copyable.
-    @inlinable
-    @_disfavoredOverload
-    public static func < (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
-        switch lhs {
-        case .left(let lLeft):
-            switch rhs {
-            case .left(let rLeft):
-                return lLeft < rLeft
+    extension Either: Comparison.`Protocol`
+    where
+        Left: Comparison.`Protocol` & ~Copyable & ~Escapable,
+        Right: Comparison.`Protocol` & ~Copyable & ~Escapable
+    {
+        /// Returns whether the left-hand side either is less than the right-hand
+        /// side under the lexicographic ordering: `.left(_) < .right(_)` for any
+        /// payloads, with payloads compared within a matching case.
+        ///
+        /// - Note: Uses `@_disfavoredOverload` so the stdlib `Swift.Comparable`
+        ///   conformance is preferred when both arms are Copyable.
+        @inlinable
+        @_disfavoredOverload
+        public static func < (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
+            switch lhs {
+            case .left(let lLeft):
+                switch rhs {
+                case .left(let rLeft):
+                    return lLeft < rLeft
 
-            case .right:
-                return true
-            }
+                case .right:
+                    return true
+                }
 
-        case .right(let lRight):
-            switch rhs {
-            case .left:
-                return false
+            case .right(let lRight):
+                switch rhs {
+                case .left:
+                    return false
 
-            case .right(let rRight):
-                return lRight < rRight
+                case .right(let rRight):
+                    return lRight < rRight
+                }
             }
         }
     }
-}
 #else
-// Swift 6.4+: Comparison.Protocol = Swift.Comparable. Drops ~Escapable arm.
-extension Either: Comparison.`Protocol`
-where
-    Left: Comparison.`Protocol` & ~Copyable,
-    Right: Comparison.`Protocol` & ~Copyable
-{
-    @inlinable
-    @_disfavoredOverload
-    public static func < (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
-        switch lhs {
-        case .left(let lLeft):
-            switch rhs {
-            case .left(let rLeft):
-                return lLeft < rLeft
+    // Swift 6.4+: Comparison.Protocol = Swift.Comparable. Drops ~Escapable arm.
+    extension Either: Comparison.`Protocol`
+    where
+        Left: Comparison.`Protocol` & ~Copyable,
+        Right: Comparison.`Protocol` & ~Copyable
+    {
+        /// Returns whether the left-hand side is ordered before the right-hand side under the
+        /// lexicographic ordering: `.left(_) < .right(_)`, with payloads compared within a matching case.
+        @inlinable
+        @_disfavoredOverload
+        public static func < (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
+            switch lhs {
+            case .left(let lLeft):
+                switch rhs {
+                case .left(let rLeft):
+                    return lLeft < rLeft
 
-            case .right:
-                return true
-            }
+                case .right:
+                    return true
+                }
 
-        case .right(let lRight):
-            switch rhs {
-            case .left:
-                return false
+            case .right(let lRight):
+                switch rhs {
+                case .left:
+                    return false
 
-            case .right(let rRight):
-                return lRight < rRight
+                case .right(let rRight):
+                    return lRight < rRight
+                }
             }
         }
     }
-}
 #endif
