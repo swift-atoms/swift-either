@@ -36,6 +36,7 @@ let package = Package(
         .testTarget(
             name: "Either Primitives Tests",
             dependencies: [
+                .product(name: "Equation Primitives", package: "swift-equation-primitives"),
                 "Either Primitives",
                 .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions"),
             ]
