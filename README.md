@@ -109,12 +109,6 @@ Dependencies (path-resolved at development time): `swift-equation-primitives`, `
 
 ---
 
-## Community
-
-<!-- BEGIN: discussion -->
-Discuss this package: [swift-institute/discussions/15](https://github.com/orgs/swift-institute/discussions/15)
-<!-- END: discussion -->
-
 ## License
 
 Apache 2.0. See [LICENSE.md](LICENSE.md).
