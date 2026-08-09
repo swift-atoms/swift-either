@@ -772,37 +772,45 @@ extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash.`Protocol` {
     }
 }
 
-// MARK: - Institute Integration on ~Copyable & ~Escapable arms
+// MARK: - Institute Integration on ~Copyable arms
 
 extension `Either Tests`.Unit.`Institute Integration` {
 
-    // ~Copyable & ~Escapable institute-protocol-conformer for the mixed-suppression integration tests.
-    struct Cell: ~Copyable, ~Escapable {
+    // ~Copyable institute-protocol-conformer for the mixed-suppression integration tests.
+    //
+    // Escapable, not ~Escapable: on Swift 6.4+, Equation/Hash/Comparison.Protocol are
+    // typealiases to the stdlib protocols per SE-0499, and the Either conditional
+    // conformances in Either+{Equation,Hash,Comparison}.Protocol.swift deliberately drop
+    // the ~Escapable arm on that toolchain (see the `#else` branches there). A ~Escapable
+    // Cell would not satisfy those conformances at all under Swift 6.4+ — suppressing
+    // Escapable here would not exercise a supported product capability, it would just
+    // fail to compile. Track restoring ~Escapable coverage if the product ever regains
+    // support for ~Escapable arms in the Swift 6.4+ path.
+    struct Cell: ~Copyable {
         let id: Int
-        @_lifetime(immortal)
         init(id: Int) { self.id = id }
     }
 
     @Test
     func `Either<Cell, Cell> conforms to Equation Protocol`() {
-        func _requireEquationProtocol<T: Equation.`Protocol` & ~Copyable & ~Escapable>(_: T.Type) {}
+        func _requireEquationProtocol<T: Equation.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireEquationProtocol(Either<Cell, Cell>.self)
     }
 
     @Test
     func `Either<Cell, Cell> conforms to Hash Protocol`() {
-        func _requireHashProtocol<T: Hash.`Protocol` & ~Copyable & ~Escapable>(_: T.Type) {}
+        func _requireHashProtocol<T: Hash.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireHashProtocol(Either<Cell, Cell>.self)
     }
 
     @Test
     func `Either<Cell, Cell> conforms to Comparison Protocol`() {
-        func _requireComparisonProtocol<T: Comparison.`Protocol` & ~Copyable & ~Escapable>(_: T.Type) {}
+        func _requireComparisonProtocol<T: Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireComparisonProtocol(Either<Cell, Cell>.self)
     }
 
     @Test
-    func `Equation Protocol equality on ~Copyable & ~Escapable arms`() {
+    func `Equation Protocol equality on ~Copyable arms`() {
         let a: Either<Cell, Cell> = .left(Cell(id: 7))
         let b: Either<Cell, Cell> = .left(Cell(id: 7))
         let c: Either<Cell, Cell> = .left(Cell(id: 9))
@@ -813,7 +821,7 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 
     @Test
-    func `Comparison Protocol orders left before right on ~Copyable & ~Escapable arms`() {
+    func `Comparison Protocol orders left before right on ~Copyable arms`() {
         let l: Either<Cell, Cell> = .left(Cell(id: 999))
         let r: Either<Cell, Cell> = .right(Cell(id: 0))
         let leftLessThanRight = l < r
@@ -821,7 +829,7 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 
     @Test
-    func `Hash Protocol equal values produce equal hashes on ~Copyable & ~Escapable arms`() {
+    func `Hash Protocol equal values produce equal hashes on ~Copyable arms`() {
         let a: Either<Cell, Cell> = .left(Cell(id: 11))
         let b: Either<Cell, Cell> = .left(Cell(id: 11))
         var ha = Hasher()
