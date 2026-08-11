@@ -1,1 +1,0 @@
-Cross-module: ConsumingMethodPatterns library (consuming method declarations) imported by consuming-method-patterns executable. Both built clean in debug + release; runtime output prints all 7 variants successfully.
