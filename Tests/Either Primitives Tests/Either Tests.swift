@@ -275,7 +275,10 @@ extension `Either Tests`.Unit.`Flat Map` {
     func `static flatMap mirrors instance flatMap`() {
         let either: Either<String, Int> = .right(3)
         let viaInstance = either.flatMap(right: { Either<String, Int>.right($0 + 1) })
-        let viaStatic = Either<String, Int>.flatMap(either, right: { Either<String, Int>.right($0 + 1) })
+        let viaStatic = Either<String, Int>.flatMap(
+            either,
+            right: { Either<String, Int>.right($0 + 1) }
+        )
         #expect(viaInstance == viaStatic)
     }
 }
@@ -788,7 +791,6 @@ extension `Either Tests`.Unit.`Institute Integration` {
     // support for ~Escapable arms in the Swift 6.4+ path.
     struct Cell: ~Copyable {
         let id: Int
-        init(id: Int) { self.id = id }
     }
 
     @Test

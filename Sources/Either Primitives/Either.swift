@@ -76,7 +76,9 @@
 /// `consuming` variants for `~Copyable` arms are tracked in
 /// `Experiments/consuming-method-patterns/`.
 @frozen
-public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>: ~Copyable, ~Escapable {
+public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>: ~Copyable,
+    ~Escapable
+{
     /// The left alternative.
     case left(Left)
 
