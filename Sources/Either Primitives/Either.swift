@@ -100,22 +100,6 @@ where
 
 extension Either: BitwiseCopyable where Left: BitwiseCopyable, Right: BitwiseCopyable {}
 
-// Stdlib Equatable / Hashable conformances are gated `#if swift(<6.4)` only.
-// On Swift 6.4+ each institute `*.Protocol` is a typealias to its stdlib
-// counterpart per SE-0499, so the unconditional institute conformance in
-// `Either+Equation.Protocol.swift` / `Either+Hash.Protocol.swift` IS the
-// stdlib conformance — declaring an additional stdlib extension here would
-// trigger duplicate-conformance ("there cannot be more than one conformance,
-// even with different conditional bounds"). On <6.4 the institute protocols
-// are distinct from stdlib, so synthesis-based stdlib extensions for the
-// Copyable case are needed alongside the institute borrowing-parameter
-// conformances. Pattern matches swift-pair-primitives.
-#if swift(<6.4)
-    extension Either: Equatable where Left: Equatable, Right: Equatable {}
-
-    extension Either: Hashable where Left: Hashable, Right: Hashable {}
-#endif
-
 #if !hasFeature(Embedded)
     extension Either: Codable where Left: Codable, Right: Codable {}
 #endif
