@@ -1,12 +1,9 @@
-// Either+Hash.Protocol.swift
-// Conformance of Either to Hash.Protocol — unconditional.
-
 extension Either: Swift.Hashable
 where
     Left: Hash.`Protocol` & ~Copyable,
     Right: Hash.`Protocol` & ~Copyable
 {
-    /// Hashes the essential components of this either value into the given hasher.
+
     @inlinable
     @_disfavoredOverload
     public borrowing func hash(into hasher: inout Hasher) {

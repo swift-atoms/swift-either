@@ -1,12 +1,8 @@
-// Either Tests.swift
-
 import Comparison_Primitives
 import Either_Primitives
 import Equation_Primitives
 import Hash_Primitives
 import Testing
-
-// MARK: - Suite Structure
 
 @Suite
 struct `Either Tests` {
@@ -15,8 +11,6 @@ struct `Either Tests` {
     @Suite struct Integration {}
     @Suite(.serialized) struct Performance {}
 }
-
-// MARK: - Unit sub-suites
 
 extension `Either Tests`.Unit {
     @Suite struct Construction {}
@@ -30,8 +24,6 @@ extension `Either Tests`.Unit {
     @Suite struct `Institute Integration` {}
     @Suite struct `Consuming Variants` {}
 }
-
-// MARK: - Construction
 
 extension `Either Tests`.Unit.Construction {
 
@@ -55,8 +47,6 @@ extension `Either Tests`.Unit.Construction {
         #expect(value == 42)
     }
 }
-
-// MARK: - Map (right)
 
 extension `Either Tests`.Unit.Map {
 
@@ -175,8 +165,6 @@ extension `Either Tests`.Unit.Map {
     }
 }
 
-// MARK: - FlatMap
-
 extension `Either Tests`.Unit.`Flat Map` {
 
     @Test
@@ -283,8 +271,6 @@ extension `Either Tests`.Unit.`Flat Map` {
     }
 }
 
-// MARK: - Fold
-
 extension `Either Tests`.Unit.Fold {
 
     @Test
@@ -332,8 +318,6 @@ extension `Either Tests`.Unit.Fold {
     }
 }
 
-// MARK: - Swap
-
 extension `Either Tests`.Unit.Swap {
 
     @Test
@@ -370,7 +354,6 @@ extension `Either Tests`.Unit.Swap {
         #expect(Either<String, Int>.swapped(original) == original.swapped())
     }
 
-    // ~Escapable arm support — instance form
     @Test
     func `swapped admits noncopyable nonescapable right arm`() {
         struct View: ~Escapable {
@@ -403,7 +386,6 @@ extension `Either Tests`.Unit.Swap {
         #expect(value.id == 5)
     }
 
-    // Mixed-suppression arms (~Copyable & ~Escapable) — instance form
     @Test
     func `swapped admits ~Copyable & ~Escapable right arm`() {
         struct Span: ~Copyable, ~Escapable {
@@ -437,8 +419,6 @@ extension `Either Tests`.Unit.Swap {
     }
 }
 
-// MARK: - Accessors
-
 extension `Either Tests`.Unit.Accessors {
 
     @Test
@@ -456,8 +436,6 @@ extension `Either Tests`.Unit.Accessors {
     }
 }
 
-// MARK: - Never elimination
-
 extension `Either Tests`.Unit.`Never Elimination` {
 
     @Test
@@ -472,7 +450,6 @@ extension `Either Tests`.Unit.`Never Elimination` {
         #expect(only.value == 7)
     }
 
-    // Free-function form — Copyable arm cohabitation with property
     @Test
     func `value of free function on copyable right matches property`() {
         let only: Either<Never, Int> = .right(11)
@@ -502,7 +479,6 @@ extension `Either Tests`.Unit.`Never Elimination` {
         #expect(extracted.id == 99)
     }
 
-    // ~Escapable arm support — Either<Never, View>
     @Test
     func `value of free function admits noncopyable nonescapable right`() {
         struct View: ~Escapable {
@@ -527,7 +503,6 @@ extension `Either Tests`.Unit.`Never Elimination` {
         #expect(extracted.id == 99)
     }
 
-    // Mixed-suppression arms (~Copyable & ~Escapable)
     @Test
     func `value of free function admits ~Copyable & ~Escapable right`() {
         struct Span: ~Copyable, ~Escapable {
@@ -552,27 +527,16 @@ extension `Either Tests`.Unit.`Never Elimination` {
         #expect(extracted.id == 29)
     }
 
-    // CHECK 3: Either<Never, Never> ambiguity
-    //
-    // Both `where Left == Never` and `where Right == Never` extensions apply
-    // when both arms are Never. The type is uninhabited (you cannot construct
-    // an Either<Never, Never>), so the ambiguity is unreachable at runtime.
-    // This test verifies the type DECLARES correctly and a function accepting
-    // it compiles — the body never runs.
     @Test
     func `Either Never Never type declarable and function-accepting compiles`() {
-        // Witness: declaring the type and a function over it compiles.
-        // Cannot be inhabited, so cannot exercise .value at runtime.
+
         func _accepts(_: Either<Never, Never>) -> Never {
             fatalError("uninhabited")
         }
-        // Compile-time witness only: a function reference verifies the
-        // signature is well-formed.
+
         let _: (Either<Never, Never>) -> Never = _accepts
     }
 }
-
-// MARK: - Conformances
 
 extension `Either Tests`.Unit.Conformances {
 
@@ -603,9 +567,7 @@ extension `Either Tests`.Unit.Conformances {
 
     @Test
     func `Either is Codable when both arms are Codable`() {
-        // Compile-time conformance check — round-trip would require a
-        // Foundation-free encoder/decoder; the synthesized conformance is
-        // mechanical so the conformance witness is the load-bearing claim.
+
         func _requireCodable<T: Codable>(_: T.Type) {}
         _requireCodable(Either<String, Int>.self)
         _requireCodable(Either<Int, Bool>.self)
@@ -628,10 +590,7 @@ extension `Either Tests`.Unit.Conformances {
 
     @Test
     func `Either is Sendable when both arms are ~Copyable & Sendable`() {
-        // The headline conformance-ladder test: this exercises the
-        // `Left/Right: Sendable & ~Copyable & ~Escapable` conditional
-        // conformance — the constraint shape that mirrors stdlib
-        // `Result.swift` for non-copyable success types.
+
         struct Resource: ~Copyable, Sendable { let id: Int }
         func _requireSendable<T: Sendable & ~Copyable & ~Escapable>(_: T.Type) {}
         _requireSendable(Either<Resource, Resource>.self)
@@ -644,11 +603,8 @@ extension `Either Tests`.Unit.Conformances {
     }
 }
 
-// MARK: - Institute Integration
-
 extension `Either Tests`.Unit.`Institute Integration` {
 
-    // ~Copyable Equation.Protocol-conformer used across the integration tests.
     struct Probe: ~Copyable {
         let id: Int
     }
@@ -676,8 +632,7 @@ extension `Either Tests`.Unit.`Institute Integration` {
         let a: Either<Probe, Probe> = .left(Probe(id: 7))
         let b: Either<Probe, Probe> = .left(Probe(id: 7))
         let c: Either<Probe, Probe> = .left(Probe(id: 9))
-        // `#expect(a == b)` cannot bind `a, b` as ~Copyable operands directly
-        // through the macro expansion, so we materialize the Bool first.
+
         let abEqual = a == b
         let acEqual = a == c
         #expect(abEqual)
@@ -755,8 +710,6 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 }
 
-// MARK: - Probe institute-protocol conformances
-
 extension `Either Tests`.Unit.`Institute Integration`.Probe: Equation.`Protocol` {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
@@ -775,20 +728,8 @@ extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash.`Protocol` {
     }
 }
 
-// MARK: - Institute Integration on ~Copyable arms
-
 extension `Either Tests`.Unit.`Institute Integration` {
 
-    // ~Copyable institute-protocol-conformer for the mixed-suppression integration tests.
-    //
-    // Escapable, not ~Escapable: on Swift 6.4+, Equation/Hash/Comparison.Protocol are
-    // typealiases to the stdlib protocols per SE-0499, and the Either conditional
-    // conformances in Either+{Equation,Hash,Comparison}.Protocol.swift deliberately drop
-    // the ~Escapable arm on that toolchain (see the `#else` branches there). A ~Escapable
-    // Cell would not satisfy those conformances at all under Swift 6.4+ — suppressing
-    // Escapable here would not exercise a supported product capability, it would just
-    // fail to compile. Track restoring ~Escapable coverage if the product ever regains
-    // support for ~Escapable arms in the Swift 6.4+ path.
     struct Cell: ~Copyable {
         let id: Int
     }
@@ -860,11 +801,8 @@ extension `Either Tests`.Unit.`Institute Integration`.Cell: Comparison.`Protocol
     }
 }
 
-// MARK: - Consuming variants for ~Copyable arms
-
 extension `Either Tests`.Unit.`Consuming Variants` {
 
-    /// `~Copyable` resource type used to validate consuming-method behaviour.
     struct Resource: ~Copyable {
         let id: Int
         init(_ id: Int) { self.id = id }

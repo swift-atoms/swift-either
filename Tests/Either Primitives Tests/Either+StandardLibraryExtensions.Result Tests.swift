@@ -1,12 +1,6 @@
-// Either+StandardLibraryExtensions.Result Tests.swift
-// Verifies the one-direction interop init from the institute's
-// ~Copyable-aware Result into Either.
-
 import Either_Primitives
 import Standard_Library_Extensions
 import Testing
-
-// MARK: - Suite Structure
 
 @Suite
 struct `Either StandardLibraryExtensions Result Tests` {
@@ -16,14 +10,10 @@ struct `Either StandardLibraryExtensions Result Tests` {
     @Suite(.serialized) struct Performance {}
 }
 
-// MARK: - Unit sub-suites
-
 extension `Either StandardLibraryExtensions Result Tests`.Unit {
     @Suite struct `Copyable Success` {}
     @Suite struct `Noncopyable Success` {}
 }
-
-// MARK: - Fixtures
 
 private struct InteropError: Swift.Error, Equatable {
     let code: Int
@@ -33,8 +23,6 @@ private struct InteropResource: ~Copyable {
     let id: Int
     init(_ id: Int) { self.id = id }
 }
-
-// MARK: - Copyable success path
 
 extension `Either StandardLibraryExtensions Result Tests`.Unit.`Copyable Success` {
 
@@ -97,8 +85,7 @@ extension `Either StandardLibraryExtensions Result Tests`.Unit.`Copyable Success
     @Test
     func `Either(SLE.Result) is usable as a Swift_Error coproduct`() {
         struct Fault: Swift.Error, Equatable {}
-        // The Either<InteropError, Fault> case witnesses that the
-        // converted Either composes with `throws(Either<...>)` sites.
+
         let result: Standard_Library_Extensions.Result<Fault, InteropError> =
             .failure(InteropError(code: 3))
         let either: Either<InteropError, Fault> = Either(result)
@@ -107,8 +94,7 @@ extension `Either StandardLibraryExtensions Result Tests`.Unit.`Copyable Success
             return
         }
         #expect(err.code == 3)
-        // Confirm the conditional Swift.Error conformance applies — i.e.,
-        // the Either is throwable.
+
         func throwIt(_ e: Either<InteropError, Fault>) throws(Either<InteropError, Fault>) {
             throw e
         }
@@ -124,8 +110,6 @@ extension `Either StandardLibraryExtensions Result Tests`.Unit.`Copyable Success
         }
     }
 }
-
-// MARK: - Noncopyable success path
 
 extension `Either StandardLibraryExtensions Result Tests`.Unit.`Noncopyable Success` {
 
