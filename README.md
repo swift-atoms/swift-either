@@ -1,4 +1,4 @@
-# Either Primitives
+# Either
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
@@ -11,7 +11,7 @@ Use `Either` for typed disjoint alternatives that carry their own value — clas
 ## Quick Start
 
 ```swift
-import Either_Primitives
+import Either
 
 let success: Either<String, Int> = .right(42)
 let failure: Either<String, Int> = .left("not found")
@@ -66,7 +66,7 @@ pending stdlib `Borrow<T>`.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-primitives/swift-either-primitives.git", branch: "main")
+    .package(url: "https://github.com/swift-molecules/swift-either.git", branch: "main")
 ]
 ```
 
@@ -74,7 +74,7 @@ dependencies: [
 .target(
     name: "App",
     dependencies: [
-        .product(name: "Either Primitives", package: "swift-either-primitives"),
+        .product(name: "Either", package: "swift-either"),
     ]
 )
 ```
@@ -89,11 +89,11 @@ One library product, one target.
 
 | Product | Target | Contents |
 |---------|--------|----------|
-| `Either Primitives` | `Sources/Either Primitives/` | `Either<Left, Right>` + `map(left:)` / `map(right:)` / `map(left:right:)` / `flatMap(right:)` / `flatMap(left:)` / `fold(left:right:)` / `swapped()` + `.left` / `.right` accessors + `Never`-elimination `value` accessors. |
+| `Either` | `Sources/Either/` | `Either<Left, Right>` + `map(left:)` / `map(right:)` / `map(left:right:)` / `flatMap(right:)` / `flatMap(left:)` / `fold(left:right:)` / `swapped()` + `.left` / `.right` accessors + `Never`-elimination `value` accessors. |
 
 The conditional conformance ladder mirrors stdlib `Result.swift`'s triple-extension pattern. Conditional `Equation.Protocol`, `Hash.Protocol`, and `Comparison.Protocol` conformances admit `~Copyable` arms — `Either<NCResource, NCResource>` is comparable, hashable, and equation-conforming via the `borrowing` operators when arms conform.
 
-Dependencies (path-resolved at development time): `swift-equation-primitives`, `swift-hash-primitives`, `swift-comparison-primitives`. Foundation-free.
+Dependencies (path-resolved at development time): `swift-equation`, `swift-hash`, `swift-comparison`. Foundation-free.
 
 ---
 

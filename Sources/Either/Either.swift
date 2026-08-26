@@ -1,6 +1,6 @@
-@_exported public import Comparison_Primitives
-@_exported public import Equation_Primitives
-@_exported public import Hash_Primitives
+@_exported public import Comparison
+@_exported public import Equation
+@_exported public import Hash
 
 @frozen
 public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>: ~Copyable,

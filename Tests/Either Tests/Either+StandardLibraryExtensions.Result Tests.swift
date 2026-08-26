@@ -1,4 +1,4 @@
-import Either_Primitives
+import Either
 import Standard_Library_Extensions
 import Testing
 

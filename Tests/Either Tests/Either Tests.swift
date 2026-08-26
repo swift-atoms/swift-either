@@ -1,7 +1,7 @@
-import Comparison_Primitives
-import Either_Primitives
-import Equation_Primitives
-import Hash_Primitives
+import Comparison
+import Either
+import Equation
+import Hash
 import Testing
 
 @Suite
