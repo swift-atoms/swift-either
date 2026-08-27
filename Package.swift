@@ -44,7 +44,10 @@ let package = Package(
         ),
         .testTarget(
             name: "Either Tests",
-            dependencies: ["Either"]
+            dependencies: [
+                "Either",
+                "Either Standard Library Integration",
+            ]
         ),
     ],
     swiftLanguageModes: [.v6]
