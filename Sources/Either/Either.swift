@@ -1,7 +1,3 @@
-@_exported public import Comparison
-@_exported public import Equation
-@_exported public import Hash
-
 @frozen
 public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>: ~Copyable,
     ~Escapable
@@ -23,9 +19,5 @@ where
 {}
 
 extension Either: BitwiseCopyable where Left: BitwiseCopyable, Right: BitwiseCopyable {}
-
-#if !hasFeature(Embedded)
-    extension Either: Codable where Left: Codable, Right: Codable {}
-#endif
 
 extension Either: Swift.Error where Left: Swift.Error, Right: Swift.Error {}

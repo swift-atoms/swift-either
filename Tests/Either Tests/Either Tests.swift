@@ -1,7 +1,4 @@
-import Comparison
 import Either
-import Equation
-import Hash
 import Testing
 
 @Suite
