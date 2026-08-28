@@ -1,20 +1,20 @@
-extension Either: Comparison.`Protocol`
+extension Either: Equation::Equation.`Protocol`
 where
-    Left: Comparison.`Protocol` & ~Copyable,
-    Right: Comparison.`Protocol` & ~Copyable
+    Left: Equation::Equation.`Protocol` & ~Copyable,
+    Right: Equation::Equation.`Protocol` & ~Copyable
 {
 
     @inlinable
     @_disfavoredOverload
-    public static func < (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
+    public static func == (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
         switch lhs {
         case .left(let lLeft):
             switch rhs {
             case .left(let rLeft):
-                return lLeft < rLeft
+                return lLeft == rLeft
 
             case .right:
-                return true
+                return false
             }
 
         case .right(let lRight):
@@ -23,7 +23,7 @@ where
                 return false
 
             case .right(let rRight):
-                return lRight < rRight
+                return lRight == rRight
             }
         }
     }

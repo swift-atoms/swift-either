@@ -1,7 +1,7 @@
 extension Either: Swift.Hashable
 where
-    Left: Hash.`Protocol` & ~Copyable,
-    Right: Hash.`Protocol` & ~Copyable
+    Left: Hash::Hash.`Protocol` & ~Copyable,
+    Right: Hash::Hash.`Protocol` & ~Copyable
 {
 
     @inlinable
@@ -19,8 +19,8 @@ where
     }
 }
 
-extension Either: Hash.`Protocol`
+extension Either: Hash::Hash.`Protocol`
 where
-    Left: Hash.`Protocol` & ~Copyable,
-    Right: Hash.`Protocol` & ~Copyable
+    Left: Hash::Hash.`Protocol` & ~Copyable,
+    Right: Hash::Hash.`Protocol` & ~Copyable
 {}
