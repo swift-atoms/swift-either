@@ -30,10 +30,6 @@ let package = Package(
             url: "https://github.com/swift-atoms/swift-comparison.git",
             branch: "main"
         ),
-        .package(
-            url: "https://github.com/swift-atoms/swift-standard-library-extensions.git",
-            branch: "main"
-        ),
     ],
     targets: [
         .target(
@@ -42,20 +38,12 @@ let package = Package(
                 .product(name: "Equation Protocol", package: "swift-equation"),
                 .product(name: "Hash Protocol", package: "swift-hash"),
                 .product(name: "Comparison Protocol", package: "swift-comparison"),
-                .product(
-                    name: "Standard Library Extensions",
-                    package: "swift-standard-library-extensions"
-                ),
             ]
         ),
         .testTarget(
             name: "Either Tests",
             dependencies: [
                 .target(name: "Either"),
-                .product(
-                    name: "Standard Library Extensions",
-                    package: "swift-standard-library-extensions"
-                ),
             ]
         ),
     ],
