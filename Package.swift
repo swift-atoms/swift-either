@@ -19,19 +19,15 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-molecules/swift-equation.git",
+            url: "https://github.com/swift-atoms/swift-equation.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-hash.git",
+            url: "https://github.com/swift-atoms/swift-hash.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-comparison.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-standard-library-extensions.git",
+            url: "https://github.com/swift-atoms/swift-comparison.git",
             branch: "main"
         ),
     ],
@@ -39,23 +35,18 @@ let package = Package(
         .target(
             name: "Either",
             dependencies: [
-                .product(name: "Equation", package: "swift-equation"),
-                .product(name: "Hash", package: "swift-hash"),
-                .product(name: "Comparison", package: "swift-comparison"),
-                .product(
-                    name: "Standard Library Extensions",
-                    package: "swift-standard-library-extensions"
-                ),
+                .product(name: "Equation Protocol", package: "swift-equation"),
+                .product(name: "Hash Protocol", package: "swift-hash"),
+                .product(name: "Comparison Protocol", package: "swift-comparison"),
             ]
         ),
         .testTarget(
             name: "Either Tests",
             dependencies: [
-                .product(name: "Equation", package: "swift-equation"),
-                "Either",
+                .target(name: "Either"),
                 .product(
-                    name: "Standard Library Extensions",
-                    package: "swift-standard-library-extensions"
+                    name: "Hash Standard Library Integration",
+                    package: "swift-hash"
                 ),
             ]
         ),

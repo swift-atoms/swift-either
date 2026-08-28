@@ -1,7 +1,5 @@
-import Comparison
 import Either
-import Equation
-import Hash
+import Hash_Standard_Library_Integration
 import Testing
 
 @Suite
@@ -611,19 +609,19 @@ extension `Either Tests`.Unit.`Institute Integration` {
 
     @Test
     func `Either<Probe, Probe> conforms to Equation Protocol`() {
-        func _requireEquationProtocol<T: Equation.`Protocol` & ~Copyable>(_: T.Type) {}
+        func _requireEquationProtocol<T: Equation::Equation.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireEquationProtocol(Either<Probe, Probe>.self)
     }
 
     @Test
     func `Either<Probe, Probe> conforms to Hash Protocol`() {
-        func _requireHashProtocol<T: Hash.`Protocol` & ~Copyable>(_: T.Type) {}
+        func _requireHashProtocol<T: Hash::Hash.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireHashProtocol(Either<Probe, Probe>.self)
     }
 
     @Test
     func `Either<Probe, Probe> conforms to Comparison Protocol`() {
-        func _requireComparisonProtocol<T: Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
+        func _requireComparisonProtocol<T: Comparison::Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireComparisonProtocol(Either<Probe, Probe>.self)
     }
 
@@ -710,19 +708,19 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Probe: Equation.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Equation::Equation.`Protocol` {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Probe: Comparison.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Comparison::Comparison.`Protocol` {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash::Hash.`Protocol` {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -736,19 +734,19 @@ extension `Either Tests`.Unit.`Institute Integration` {
 
     @Test
     func `Either<Cell, Cell> conforms to Equation Protocol`() {
-        func _requireEquationProtocol<T: Equation.`Protocol` & ~Copyable>(_: T.Type) {}
+        func _requireEquationProtocol<T: Equation::Equation.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireEquationProtocol(Either<Cell, Cell>.self)
     }
 
     @Test
     func `Either<Cell, Cell> conforms to Hash Protocol`() {
-        func _requireHashProtocol<T: Hash.`Protocol` & ~Copyable>(_: T.Type) {}
+        func _requireHashProtocol<T: Hash::Hash.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireHashProtocol(Either<Cell, Cell>.self)
     }
 
     @Test
     func `Either<Cell, Cell> conforms to Comparison Protocol`() {
-        func _requireComparisonProtocol<T: Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
+        func _requireComparisonProtocol<T: Comparison::Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
         _requireComparisonProtocol(Either<Cell, Cell>.self)
     }
 
@@ -783,19 +781,19 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Cell: Equation.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Equation::Equation.`Protocol` {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Cell: Hash.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Hash::Hash.`Protocol` {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Cell: Comparison.`Protocol` {
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Comparison::Comparison.`Protocol` {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }

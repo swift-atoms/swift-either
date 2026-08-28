@@ -1,7 +1,7 @@
-extension Either: Equation.`Protocol`
+extension Either: Equation::Equation.`Protocol`
 where
-    Left: Equation.`Protocol` & ~Copyable,
-    Right: Equation.`Protocol` & ~Copyable
+    Left: Equation::Equation.`Protocol` & ~Copyable,
+    Right: Equation::Equation.`Protocol` & ~Copyable
 {
 
     @inlinable

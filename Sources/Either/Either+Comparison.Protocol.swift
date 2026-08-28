@@ -1,7 +1,7 @@
-extension Either: Comparison.`Protocol`
+extension Either: Comparison::Comparison.`Protocol`
 where
-    Left: Comparison.`Protocol` & ~Copyable,
-    Right: Comparison.`Protocol` & ~Copyable
+    Left: Comparison::Comparison.`Protocol` & ~Copyable,
+    Right: Comparison::Comparison.`Protocol` & ~Copyable
 {
 
     @inlinable

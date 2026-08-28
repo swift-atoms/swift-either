@@ -66,7 +66,7 @@ pending stdlib `Borrow<T>`.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-molecules/swift-either.git", branch: "main")
+    .package(url: "https://github.com/swift-atoms/swift-either.git", branch: "main")
 ]
 ```
 
