@@ -44,6 +44,10 @@ let package = Package(
             name: "Either Tests",
             dependencies: [
                 .target(name: "Either"),
+                .product(
+                    name: "Hash Standard Library Integration",
+                    package: "swift-hash"
+                ),
             ]
         ),
     ],

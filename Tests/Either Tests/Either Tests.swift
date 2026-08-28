@@ -1,4 +1,5 @@
 import Either
+import Hash_Standard_Library_Integration
 import Testing
 
 @Suite
