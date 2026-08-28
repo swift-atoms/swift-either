@@ -1,5 +1,7 @@
+import Comparison
 import Either
-import Either_Standard_Library_Integration
+import Equation
+import Hash
 import Testing
 
 @Suite
@@ -19,6 +21,7 @@ extension `Either Tests`.Unit {
     @Suite struct Accessors {}
     @Suite struct `Never Elimination` {}
     @Suite struct Conformances {}
+    @Suite struct `Institute Integration` {}
     @Suite struct `Consuming Variants` {}
 }
 
@@ -537,6 +540,21 @@ extension `Either Tests`.Unit.`Never Elimination` {
 
 extension `Either Tests`.Unit.Conformances {
 
+    @Test
+    func `Either is Equatable when both arms are Equatable`() {
+        let a: Either<String, Int> = .right(1)
+        let b: Either<String, Int> = .right(1)
+        let c: Either<String, Int> = .right(2)
+        #expect(a == b)
+        #expect(a != c)
+    }
+
+    @Test
+    func `Either is Hashable when both arms are Hashable`() {
+        let set: Set<Either<String, Int>> = [.left("a"), .right(1), .left("a")]
+        #expect(set.count == 2)
+    }
+
     struct Refusal: Swift.Error, Equatable {}
     struct Conflict: Swift.Error, Equatable {}
 
@@ -582,6 +600,204 @@ extension `Either Tests`.Unit.Conformances {
     func `Either is Copyable when both arms are Copyable`() {
         func _requireCopyable<T: Copyable>(_: T.Type) {}
         _requireCopyable(Either<String, Int>.self)
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration` {
+
+    struct Probe: ~Copyable {
+        let id: Int
+    }
+
+    @Test
+    func `Either<Probe, Probe> conforms to Equation Protocol`() {
+        func _requireEquationProtocol<T: Equation.`Protocol` & ~Copyable>(_: T.Type) {}
+        _requireEquationProtocol(Either<Probe, Probe>.self)
+    }
+
+    @Test
+    func `Either<Probe, Probe> conforms to Hash Protocol`() {
+        func _requireHashProtocol<T: Hash.`Protocol` & ~Copyable>(_: T.Type) {}
+        _requireHashProtocol(Either<Probe, Probe>.self)
+    }
+
+    @Test
+    func `Either<Probe, Probe> conforms to Comparison Protocol`() {
+        func _requireComparisonProtocol<T: Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
+        _requireComparisonProtocol(Either<Probe, Probe>.self)
+    }
+
+    @Test
+    func `Equation Protocol equality on ~Copyable arms compares left payloads`() {
+        let a: Either<Probe, Probe> = .left(Probe(id: 7))
+        let b: Either<Probe, Probe> = .left(Probe(id: 7))
+        let c: Either<Probe, Probe> = .left(Probe(id: 9))
+
+        let abEqual = a == b
+        let acEqual = a == c
+        #expect(abEqual)
+        #expect(!acEqual)
+    }
+
+    @Test
+    func `Equation Protocol equality on ~Copyable arms compares right payloads`() {
+        let a: Either<Probe, Probe> = .right(Probe(id: 3))
+        let b: Either<Probe, Probe> = .right(Probe(id: 3))
+        let c: Either<Probe, Probe> = .right(Probe(id: 4))
+        let abEqual = a == b
+        let acEqual = a == c
+        #expect(abEqual)
+        #expect(!acEqual)
+    }
+
+    @Test
+    func `Equation Protocol distinguishes left from right`() {
+        let l: Either<Probe, Probe> = .left(Probe(id: 1))
+        let r: Either<Probe, Probe> = .right(Probe(id: 1))
+        let lrEqual = l == r
+        #expect(!lrEqual)
+    }
+
+    @Test
+    func `Comparison Protocol orders left before right regardless of payload`() {
+        let l: Either<Probe, Probe> = .left(Probe(id: 999))
+        let r: Either<Probe, Probe> = .right(Probe(id: 0))
+        let leftLessThanRight = l < r
+        let rightLessThanLeft = r < l
+        #expect(leftLessThanRight)
+        #expect(!rightLessThanLeft)
+    }
+
+    @Test
+    func `Comparison Protocol orders payloads within matching cases`() {
+        let l1: Either<Probe, Probe> = .left(Probe(id: 1))
+        let l2: Either<Probe, Probe> = .left(Probe(id: 2))
+        let r1: Either<Probe, Probe> = .right(Probe(id: 1))
+        let r2: Either<Probe, Probe> = .right(Probe(id: 2))
+        let same: Either<Probe, Probe> = .left(Probe(id: 5))
+
+        let leftLeftOrdered = l1 < l2
+        let rightRightOrdered = r1 < r2
+        let irreflexive = same < same
+
+        #expect(leftLeftOrdered)
+        #expect(rightRightOrdered)
+        #expect(!irreflexive)
+    }
+
+    @Test
+    func `Hash Protocol hashes left and right cases distinctly`() {
+        let l: Either<Probe, Probe> = .left(Probe(id: 42))
+        let r: Either<Probe, Probe> = .right(Probe(id: 42))
+
+        var leftHasher = Hasher()
+        l.hash(into: &leftHasher)
+        var rightHasher = Hasher()
+        r.hash(into: &rightHasher)
+
+        #expect(leftHasher.finalize() != rightHasher.finalize())
+    }
+
+    @Test
+    func `Hash Protocol equal values produce equal hashes (left)`() {
+        let a: Either<Probe, Probe> = .left(Probe(id: 11))
+        let b: Either<Probe, Probe> = .left(Probe(id: 11))
+        var ha = Hasher()
+        a.hash(into: &ha)
+        var hb = Hasher()
+        b.hash(into: &hb)
+        #expect(ha.finalize() == hb.finalize())
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Equation.`Protocol` {
+    static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Comparison.`Protocol` {
+    static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
+        lhs.id < rhs.id
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash.`Protocol` {
+    borrowing func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration` {
+
+    struct Cell: ~Copyable {
+        let id: Int
+    }
+
+    @Test
+    func `Either<Cell, Cell> conforms to Equation Protocol`() {
+        func _requireEquationProtocol<T: Equation.`Protocol` & ~Copyable>(_: T.Type) {}
+        _requireEquationProtocol(Either<Cell, Cell>.self)
+    }
+
+    @Test
+    func `Either<Cell, Cell> conforms to Hash Protocol`() {
+        func _requireHashProtocol<T: Hash.`Protocol` & ~Copyable>(_: T.Type) {}
+        _requireHashProtocol(Either<Cell, Cell>.self)
+    }
+
+    @Test
+    func `Either<Cell, Cell> conforms to Comparison Protocol`() {
+        func _requireComparisonProtocol<T: Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
+        _requireComparisonProtocol(Either<Cell, Cell>.self)
+    }
+
+    @Test
+    func `Equation Protocol equality on ~Copyable arms`() {
+        let a: Either<Cell, Cell> = .left(Cell(id: 7))
+        let b: Either<Cell, Cell> = .left(Cell(id: 7))
+        let c: Either<Cell, Cell> = .left(Cell(id: 9))
+        let abEqual = a == b
+        let acEqual = a == c
+        #expect(abEqual)
+        #expect(!acEqual)
+    }
+
+    @Test
+    func `Comparison Protocol orders left before right on ~Copyable arms`() {
+        let l: Either<Cell, Cell> = .left(Cell(id: 999))
+        let r: Either<Cell, Cell> = .right(Cell(id: 0))
+        let leftLessThanRight = l < r
+        #expect(leftLessThanRight)
+    }
+
+    @Test
+    func `Hash Protocol equal values produce equal hashes on ~Copyable arms`() {
+        let a: Either<Cell, Cell> = .left(Cell(id: 11))
+        let b: Either<Cell, Cell> = .left(Cell(id: 11))
+        var ha = Hasher()
+        a.hash(into: &ha)
+        var hb = Hasher()
+        b.hash(into: &hb)
+        #expect(ha.finalize() == hb.finalize())
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Equation.`Protocol` {
+    static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Hash.`Protocol` {
+    borrowing func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension `Either Tests`.Unit.`Institute Integration`.Cell: Comparison.`Protocol` {
+    static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
+        lhs.id < rhs.id
     }
 }
 
@@ -684,16 +900,5 @@ extension `Either Tests`.Unit.`Consuming Variants` {
             return
         }
         #expect(other.label == "err-404")
-    }
-}
-
-private func == <Left: Equatable, Right: Equatable>(
-    lhs: Either<Left, Right>,
-    rhs: Either<Left, Right>
-) -> Bool {
-    switch (lhs, rhs) {
-    case (.left(let a), .left(let b)): a == b
-    case (.right(let a), .right(let b)): a == b
-    default: false
     }
 }

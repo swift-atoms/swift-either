@@ -15,38 +15,48 @@ let package = Package(
         .library(
             name: "Either",
             targets: ["Either"]
+        )
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/swift-molecules/swift-equation.git",
+            branch: "main"
         ),
-        .library(
-            name: "Either Standard Library Integration",
-            targets: ["Either Standard Library Integration"]
+        .package(
+            url: "https://github.com/swift-molecules/swift-hash.git",
+            branch: "main"
         ),
-        .library(
-            name: "Either Apple Foundation Integration",
-            targets: ["Either Apple Foundation Integration"]
+        .package(
+            url: "https://github.com/swift-molecules/swift-comparison.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-standard-library-extensions.git",
+            branch: "main"
         ),
     ],
-    dependencies: [],
     targets: [
         .target(
             name: "Either",
-            dependencies: []
-        ),
-        .target(
-            name: "Either Standard Library Integration",
-            dependencies: ["Either"]
-        ),
-        .target(
-            name: "Either Apple Foundation Integration",
             dependencies: [
-                "Either",
-                "Either Standard Library Integration",
+                .product(name: "Equation", package: "swift-equation"),
+                .product(name: "Hash", package: "swift-hash"),
+                .product(name: "Comparison", package: "swift-comparison"),
+                .product(
+                    name: "Standard Library Extensions",
+                    package: "swift-standard-library-extensions"
+                ),
             ]
         ),
         .testTarget(
             name: "Either Tests",
             dependencies: [
+                .product(name: "Equation", package: "swift-equation"),
                 "Either",
-                "Either Standard Library Integration",
+                .product(
+                    name: "Standard Library Extensions",
+                    package: "swift-standard-library-extensions"
+                ),
             ]
         ),
     ],
