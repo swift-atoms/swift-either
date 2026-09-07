@@ -1,24 +1,3 @@
-extension Either: Swift.Hashable
-where
-    Left: Hash::Hash.`Protocol` & ~Copyable,
-    Right: Hash::Hash.`Protocol` & ~Copyable
-{
-
-    @inlinable
-    @_disfavoredOverload
-    public borrowing func hash(into hasher: inout Hasher) {
-        switch self {
-        case .left(let left):
-            hasher.combine(0 as UInt8)
-            left.hash(into: &hasher)
-
-        case .right(let right):
-            hasher.combine(1 as UInt8)
-            right.hash(into: &hasher)
-        }
-    }
-}
-
 extension Either: Hash::Hash.`Protocol`
 where
     Left: Hash::Hash.`Protocol` & ~Copyable,

@@ -13,8 +13,8 @@ let package = Package(
     ],
     products: [
         .library(name: "Either", targets: ["Either"]),
-        .library(name: "Either Standard Library Integration", targets: ["Either Standard Library Integration"]),
-        .library(name: "Either Foundation Library Integration", targets: ["Either Foundation Library Integration"]),
+
+        .library(name: "Either Foundation Integration", targets: ["Either Foundation Integration"]),
         .library(name: "Either Test Support", targets: ["Either Test Support"]),
     ],
     dependencies: [
@@ -41,20 +41,13 @@ let package = Package(
             ],
             path: "Sources/Either"
         ),
+        
         .target(
-            name: "Either Standard Library Integration",
+            name: "Either Foundation Integration",
             dependencies: [
                 .target(name: "Either"),
             ],
-            path: "Sources/Either Standard Library Integration"
-        ),
-        .target(
-            name: "Either Foundation Library Integration",
-            dependencies: [
-                .target(name: "Either"),
-                .target(name: "Either Standard Library Integration"),
-            ],
-            path: "Sources/Either Foundation Library Integration"
+            path: "Sources/Either Foundation Integration"
         ),
         .target(
             name: "Either Test Support",
@@ -67,10 +60,9 @@ let package = Package(
             name: "Either Tests",
             dependencies: [
                 .target(name: "Either"),
-                .product(name: "Hash Standard Library Integration", package: "swift-hash"),
+                .product(name: "Hash", package: "swift-hash"),
                 .target(name: "Either Test Support"),
-                .target(name: "Either Standard Library Integration"),
-                .target(name: "Either Foundation Library Integration"),
+                .target(name: "Either Foundation Integration"),
             ],
             path: "Tests/Either Tests"
         ),

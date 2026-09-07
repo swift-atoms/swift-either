@@ -12,20 +12,16 @@ public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>:
     case right(Right)
 }
 
-extension Either: Copyable where Left: Copyable & ~Escapable, Right: Copyable & ~Escapable {}
+extension Either: Swift.Copyable where Left: Swift.Copyable & ~Escapable, Right: Swift.Copyable & ~Escapable {}
 
-extension Either: Escapable where Left: Escapable & ~Copyable, Right: Escapable & ~Copyable {}
+extension Either: Swift.Escapable where Left: Swift.Escapable & ~Copyable, Right: Swift.Escapable & ~Copyable {}
 
-extension Either: Sendable
+extension Either: Swift.Sendable
 where
-    Left: Sendable & ~Copyable & ~Escapable,
-    Right: Sendable & ~Copyable & ~Escapable
+    Left: Swift.Sendable & ~Copyable & ~Escapable,
+    Right: Swift.Sendable & ~Copyable & ~Escapable
 {}
 
-extension Either: BitwiseCopyable where Left: BitwiseCopyable, Right: BitwiseCopyable {}
-
 #if !hasFeature(Embedded)
-    extension Either: Codable where Left: Codable, Right: Codable {}
+extension Either: Swift.Codable where Left: Swift.Codable, Right: Swift.Codable {}
 #endif
-
-extension Either: Swift.Error where Left: Swift.Error, Right: Swift.Error {}
