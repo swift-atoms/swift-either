@@ -3,27 +3,27 @@ import Hash
 import Testing
 
 @Suite
-struct `Either Tests` {
-    @Suite struct Unit {}
-    @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
-    @Suite(.serialized) struct Performance {}
+struct `Either operations preserve the active arm and its payload` {
+    @Suite struct `Either construction transformation and conformances preserve arm semantics` {}
+    @Suite struct `No Either boundary cases are defined` {}
+    @Suite struct `No Either integration cases are defined` {}
+    @Suite(.serialized) struct `No Either performance cases are defined` {}
 }
 
-extension `Either Tests`.Unit {
-    @Suite struct Construction {}
-    @Suite struct Map {}
-    @Suite struct `Flat Map` {}
-    @Suite struct Fold {}
-    @Suite struct Swap {}
-    @Suite struct Accessors {}
-    @Suite struct `Never Elimination` {}
-    @Suite struct Conformances {}
-    @Suite struct `Institute Integration` {}
-    @Suite struct `Consuming Variants` {}
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics` {
+    @Suite struct `Either construction retains the selected arm and payload` {}
+    @Suite struct `Either mapping transforms selected arms and preserves untouched arms` {}
+    @Suite struct `Either flat mapping can change arms and preserves untouched arms` {}
+    @Suite struct `Either folding evaluates the active arm` {}
+    @Suite struct `Swapping Either exchanges arms and preserves payloads` {}
+    @Suite struct `Either accessors return only the active payload` {}
+    @Suite struct `Either eliminates impossible arms without losing the remaining payload` {}
+    @Suite struct `Either equality hashing and descriptions preserve arm identity` {}
+    @Suite struct `Either intrinsic conformances preserve payload and arm semantics` {}
+    @Suite struct `Consuming Either operations support noncopyable payloads` {}
 }
 
-extension `Either Tests`.Unit.Construction {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either construction retains the selected arm and payload` {
 
     @Test
     func `left case stores its payload`() {
@@ -46,7 +46,7 @@ extension `Either Tests`.Unit.Construction {
     }
 }
 
-extension `Either Tests`.Unit.Map {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either mapping transforms selected arms and preserves untouched arms` {
 
     @Test
     func `map(right:) preserves left case`() {
@@ -163,7 +163,7 @@ extension `Either Tests`.Unit.Map {
     }
 }
 
-extension `Either Tests`.Unit.`Flat Map` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either flat mapping can change arms and preserves untouched arms` {
 
     @Test
     func `flatMap(right:) preserves left case`() {
@@ -269,7 +269,7 @@ extension `Either Tests`.Unit.`Flat Map` {
     }
 }
 
-extension `Either Tests`.Unit.Fold {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either folding evaluates the active arm` {
 
     @Test
     func `fold collapses left case`() {
@@ -316,7 +316,7 @@ extension `Either Tests`.Unit.Fold {
     }
 }
 
-extension `Either Tests`.Unit.Swap {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Swapping Either exchanges arms and preserves payloads` {
 
     @Test
     func `swapped exchanges left and right`() {
@@ -417,7 +417,7 @@ extension `Either Tests`.Unit.Swap {
     }
 }
 
-extension `Either Tests`.Unit.Accessors {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either accessors return only the active payload` {
 
     @Test
     func `left accessor returns Some on .left`() {
@@ -434,7 +434,7 @@ extension `Either Tests`.Unit.Accessors {
     }
 }
 
-extension `Either Tests`.Unit.`Never Elimination` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either eliminates impossible arms without losing the remaining payload` {
 
     @Test
     func `Either where Right == Never extracts left as value`() {
@@ -536,7 +536,7 @@ extension `Either Tests`.Unit.`Never Elimination` {
     }
 }
 
-extension `Either Tests`.Unit.Conformances {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either equality hashing and descriptions preserve arm identity` {
 
     @Test
     func `Either is Equatable when both arms are Equatable`() {
@@ -601,7 +601,7 @@ extension `Either Tests`.Unit.Conformances {
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics` {
 
     struct Probe: ~Copyable {
         let id: Int
@@ -708,25 +708,25 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Probe: Equation::Equation.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Equation::Equation.`Protocol` {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Probe: Comparison::Comparison.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Comparison::Comparison.`Protocol` {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Probe: Hash::Hash.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Hash::Hash.`Protocol` {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics` {
 
     struct Cell: ~Copyable {
         let id: Int
@@ -751,7 +751,7 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 
     @Test
-    func `Equation Protocol equality on ~Copyable arms`() {
+    func `Either intrinsic equality compares noncopyable payloads`() {
         let a: Either<Cell, Cell> = .left(Cell(id: 7))
         let b: Either<Cell, Cell> = .left(Cell(id: 7))
         let c: Either<Cell, Cell> = .left(Cell(id: 9))
@@ -781,25 +781,25 @@ extension `Either Tests`.Unit.`Institute Integration` {
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Cell: Equation::Equation.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Equation::Equation.`Protocol` {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Cell: Hash::Hash.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Hash::Hash.`Protocol` {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension `Either Tests`.Unit.`Institute Integration`.Cell: Comparison::Comparison.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Comparison::Comparison.`Protocol` {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }
 }
 
-extension `Either Tests`.Unit.`Consuming Variants` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Consuming Either operations support noncopyable payloads` {
 
     struct Resource: ~Copyable {
         let id: Int
@@ -812,7 +812,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming map(right:) on ~Copyable arms`() {
+    func `Consuming Either maps the right payload with noncopyable arms`() {
         let either: Either<Resource, Resource> = .right(Resource(7))
         let mapped = either.map(right: { (r: consuming Resource) -> Tag in
             Tag("from-id-\(r.id)")
@@ -825,7 +825,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming map(left:) on ~Copyable arms`() {
+    func `Consuming Either maps the left payload with noncopyable arms`() {
         let either: Either<Resource, Resource> = .left(Resource(11))
         let mapped = either.map(left: { (r: consuming Resource) -> Tag in
             Tag("left-id-\(r.id)")
@@ -838,7 +838,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming map(left:right:) on ~Copyable arms`() {
+    func `Consuming Either maps the active payload with noncopyable arms`() {
         let either: Either<Resource, Resource> = .right(Resource(42))
         let mapped = either.map(
             left: { (l: consuming Resource) -> Tag in Tag("L\(l.id)") },
@@ -852,7 +852,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming swapped() on ~Copyable arms`() {
+    func `Consuming Either swaps arms with noncopyable arms`() {
         let either: Either<Resource, Tag> = .right(Tag("orig"))
         let swapped = either.swapped()
         guard case .left(let other) = swapped else {
@@ -863,7 +863,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming fold(left:right:) on ~Copyable arms`() {
+    func `Consuming Either folds the active payload with noncopyable arms`() {
         let either: Either<Resource, Tag> = .right(Tag("folded"))
         let result = either.fold(
             left: { (r: consuming Resource) -> Int in r.id },
@@ -873,7 +873,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming flatMap(right:) on ~Copyable arms`() {
+    func `Consuming Either flat maps the right payload with noncopyable arms`() {
         let either: Either<Resource, Resource> = .right(Resource(5))
         let chained = either.flatMap(right: {
             (r: consuming Resource) -> Either<Resource, Tag> in
@@ -887,7 +887,7 @@ extension `Either Tests`.Unit.`Consuming Variants` {
     }
 
     @Test
-    func `consuming flatMap(left:) on ~Copyable arms`() {
+    func `Consuming Either flat maps the left payload with noncopyable arms`() {
         let either: Either<Resource, Resource> = .left(Resource(404))
         let chained = either.flatMap(left: {
             (l: consuming Resource) -> Either<Tag, Resource> in
