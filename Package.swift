@@ -18,6 +18,7 @@ let package = Package(
         .library(name: "Either Test Support", targets: ["Either Test Support"]),
     ],
     dependencies: [
+
         .package(
             url: "https://github.com/swift-atoms/swift-equation.git",
             branch: "main"
@@ -65,6 +66,34 @@ let package = Package(
                 .target(name: "Either Foundation Integration"),
             ],
             path: "Tests/Either Tests"
+        ),
+        .testTarget(
+            name: "Consolidated Either Comparison Tests",
+            dependencies: [
+
+                .target(name: "Either"),
+                .product(name: "Comparison", package: "swift-comparison"),
+            ],
+            path: "Tests/Consolidated swift-either-comparison"
+        ),
+        .testTarget(
+            name: "Consolidated Either Equation Tests",
+            dependencies: [
+
+                .target(name: "Either"),
+                .product(name: "Equation", package: "swift-equation"),
+            ],
+            path: "Tests/Consolidated swift-either-equation"
+        ),
+        .testTarget(
+            name: "Consolidated Either Hash Tests",
+            dependencies: [
+                .product(name: "Equation", package: "swift-equation"),
+
+                .target(name: "Either"),
+                .product(name: "Hash", package: "swift-hash"),
+            ],
+            path: "Tests/Consolidated swift-either-hash"
         ),
     ],
     swiftLanguageModes: [.v6]
