@@ -3,8 +3,7 @@
 @_exported public import Hash
 
 @frozen
-public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>: ~Copyable,
-    ~Escapable
+public enum Either<Left: ~Copyable & ~Escapable, Right: ~Copyable & ~Escapable>: ~Copyable, ~Escapable
 {
 
     case left(Left)
