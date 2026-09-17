@@ -1,11 +1,10 @@
-extension Either: Comparison::Comparison.`Protocol`
+extension Either: Swift.Comparable
 where
-    Left: Comparison::Comparison.`Protocol` & ~Copyable,
-    Right: Comparison::Comparison.`Protocol` & ~Copyable
+    Left: Swift.Comparable & ~Copyable,
+    Right: Swift.Comparable & ~Copyable
 {
 
     @inlinable
-    @_disfavoredOverload
     public static func < (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
         switch lhs {
         case .left(let lLeft):

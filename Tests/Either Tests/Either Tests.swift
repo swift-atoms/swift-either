@@ -1,5 +1,4 @@
 import Either
-import Hash
 import Testing
 
 @Suite
@@ -608,25 +607,25 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Either<Probe, Probe> conforms to Equation Protocol`() {
-        func _requireEquationProtocol<T: Equation::Equation.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireEquationProtocol(Either<Probe, Probe>.self)
+    func `Either<Probe, Probe> conforms to Equatable`() {
+        func _requireEquatable<T: Swift.Equatable & ~Copyable>(_: T.Type) {}
+        _requireEquatable(Either<Probe, Probe>.self)
     }
 
     @Test
-    func `Either<Probe, Probe> conforms to Hash Protocol`() {
-        func _requireHashProtocol<T: Hash::Hash.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireHashProtocol(Either<Probe, Probe>.self)
+    func `Either<Probe, Probe> conforms to Hashable`() {
+        func _requireHashable<T: Swift.Hashable & ~Copyable>(_: T.Type) {}
+        _requireHashable(Either<Probe, Probe>.self)
     }
 
     @Test
-    func `Either<Probe, Probe> conforms to Comparison Protocol`() {
-        func _requireComparisonProtocol<T: Comparison::Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireComparisonProtocol(Either<Probe, Probe>.self)
+    func `Either<Probe, Probe> conforms to Comparable`() {
+        func _requireComparable<T: Swift.Comparable & ~Copyable>(_: T.Type) {}
+        _requireComparable(Either<Probe, Probe>.self)
     }
 
     @Test
-    func `Equation Protocol equality on ~Copyable arms compares left payloads`() {
+    func `Equatable equality on ~Copyable arms compares left payloads`() {
         let a: Either<Probe, Probe> = .left(Probe(id: 7))
         let b: Either<Probe, Probe> = .left(Probe(id: 7))
         let c: Either<Probe, Probe> = .left(Probe(id: 9))
@@ -638,7 +637,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Equation Protocol equality on ~Copyable arms compares right payloads`() {
+    func `Equatable equality on ~Copyable arms compares right payloads`() {
         let a: Either<Probe, Probe> = .right(Probe(id: 3))
         let b: Either<Probe, Probe> = .right(Probe(id: 3))
         let c: Either<Probe, Probe> = .right(Probe(id: 4))
@@ -649,7 +648,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Equation Protocol distinguishes left from right`() {
+    func `Equatable distinguishes left from right`() {
         let l: Either<Probe, Probe> = .left(Probe(id: 1))
         let r: Either<Probe, Probe> = .right(Probe(id: 1))
         let lrEqual = l == r
@@ -657,7 +656,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Comparison Protocol orders left before right regardless of payload`() {
+    func `Comparable orders left before right regardless of payload`() {
         let l: Either<Probe, Probe> = .left(Probe(id: 999))
         let r: Either<Probe, Probe> = .right(Probe(id: 0))
         let leftLessThanRight = l < r
@@ -667,7 +666,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Comparison Protocol orders payloads within matching cases`() {
+    func `Comparable orders payloads within matching cases`() {
         let l1: Either<Probe, Probe> = .left(Probe(id: 1))
         let l2: Either<Probe, Probe> = .left(Probe(id: 2))
         let r1: Either<Probe, Probe> = .right(Probe(id: 1))
@@ -684,7 +683,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Hash Protocol hashes left and right cases distinctly`() {
+    func `Hashable hashes left and right cases distinctly`() {
         let l: Either<Probe, Probe> = .left(Probe(id: 42))
         let r: Either<Probe, Probe> = .right(Probe(id: 42))
 
@@ -697,7 +696,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Hash Protocol equal values produce equal hashes (left)`() {
+    func `Hashable equal values produce equal hashes (left)`() {
         let a: Either<Probe, Probe> = .left(Probe(id: 11))
         let b: Either<Probe, Probe> = .left(Probe(id: 11))
         var ha = Hasher()
@@ -708,19 +707,19 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 }
 
-extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Equation::Equation.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Swift.Equatable {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Comparison::Comparison.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Swift.Comparable {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }
 }
 
-extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Hash::Hash.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Probe: Swift.Hashable {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -733,21 +732,21 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Either<Cell, Cell> conforms to Equation Protocol`() {
-        func _requireEquationProtocol<T: Equation::Equation.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireEquationProtocol(Either<Cell, Cell>.self)
+    func `Either<Cell, Cell> conforms to Equatable`() {
+        func _requireEquatable<T: Swift.Equatable & ~Copyable>(_: T.Type) {}
+        _requireEquatable(Either<Cell, Cell>.self)
     }
 
     @Test
-    func `Either<Cell, Cell> conforms to Hash Protocol`() {
-        func _requireHashProtocol<T: Hash::Hash.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireHashProtocol(Either<Cell, Cell>.self)
+    func `Either<Cell, Cell> conforms to Hashable`() {
+        func _requireHashable<T: Swift.Hashable & ~Copyable>(_: T.Type) {}
+        _requireHashable(Either<Cell, Cell>.self)
     }
 
     @Test
-    func `Either<Cell, Cell> conforms to Comparison Protocol`() {
-        func _requireComparisonProtocol<T: Comparison::Comparison.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireComparisonProtocol(Either<Cell, Cell>.self)
+    func `Either<Cell, Cell> conforms to Comparable`() {
+        func _requireComparable<T: Swift.Comparable & ~Copyable>(_: T.Type) {}
+        _requireComparable(Either<Cell, Cell>.self)
     }
 
     @Test
@@ -762,7 +761,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Comparison Protocol orders left before right on ~Copyable arms`() {
+    func `Comparable orders left before right on ~Copyable arms`() {
         let l: Either<Cell, Cell> = .left(Cell(id: 999))
         let r: Either<Cell, Cell> = .right(Cell(id: 0))
         let leftLessThanRight = l < r
@@ -770,7 +769,7 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 
     @Test
-    func `Hash Protocol equal values produce equal hashes on ~Copyable arms`() {
+    func `Hashable equal values produce equal hashes on ~Copyable arms`() {
         let a: Either<Cell, Cell> = .left(Cell(id: 11))
         let b: Either<Cell, Cell> = .left(Cell(id: 11))
         var ha = Hasher()
@@ -781,19 +780,19 @@ extension `Either operations preserve the active arm and its payload`.`Either co
     }
 }
 
-extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Equation::Equation.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Swift.Equatable {
     static func == (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Hash::Hash.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Swift.Hashable {
     borrowing func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Comparison::Comparison.`Protocol` {
+extension `Either operations preserve the active arm and its payload`.`Either construction transformation and conformances preserve arm semantics`.`Either intrinsic conformances preserve payload and arm semantics`.Cell: Swift.Comparable {
     static func < (lhs: borrowing Self, rhs: borrowing Self) -> Bool {
         lhs.id < rhs.id
     }

@@ -1,11 +1,10 @@
-extension Either: Equation::Equation.`Protocol`
+extension Either: Swift.Equatable
 where
-    Left: Equation::Equation.`Protocol` & ~Copyable,
-    Right: Equation::Equation.`Protocol` & ~Copyable
+    Left: Swift.Equatable & ~Copyable,
+    Right: Swift.Equatable & ~Copyable
 {
 
     @inlinable
-    @_disfavoredOverload
     public static func == (lhs: borrowing Either, rhs: borrowing Either) -> Bool {
         switch lhs {
         case .left(let lLeft):

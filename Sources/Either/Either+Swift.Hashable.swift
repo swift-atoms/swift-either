@@ -1,11 +1,10 @@
 extension Either: Swift.Hashable
 where
-    Left: Hash::Hash.`Protocol` & ~Copyable,
-    Right: Hash::Hash.`Protocol` & ~Copyable
+    Left: Swift.Hashable & ~Copyable,
+    Right: Swift.Hashable & ~Copyable
 {
 
     @inlinable
-    @_disfavoredOverload
     public borrowing func hash(into hasher: inout Hasher) {
         switch self {
         case .left(let left):
