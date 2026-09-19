@@ -24,7 +24,7 @@ let package = Package(
             dependencies: [],
             path: "Sources/Either"
         ),
-        
+
         .target(
             name: "Either Foundation Integration",
             dependencies: [
@@ -62,4 +62,9 @@ for target in package.targets {
         .enableExperimentalFeature("Lifetimes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
     ]
+}
+
+// Consumer compilation rejects import visibility regressions.
+for target in package.targets where target.type == .test {
+    target.swiftSettings = (target.swiftSettings ?? []) + [.treatAllWarnings(as: .error)]
 }
