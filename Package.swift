@@ -52,19 +52,15 @@ let package = Package(
     swiftLanguageModes: [.v6]
 )
 
-for target in package.targets {
-    target.swiftSettings = [
+for target in package.targets where ![.system, .binary, .plugin].contains(target.type) {
+    target.swiftSettings = (target.swiftSettings ?? []) + [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
         .enableUpcomingFeature("MemberImportVisibility"),
         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableExperimentalFeature("Lifetimes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableExperimentalFeature("Lifetimes"),
+        .treatAllWarnings(as: .error),
     ]
-}
-
-// Consumer compilation rejects import visibility regressions.
-for target in package.targets where target.type == .test {
-    target.swiftSettings = (target.swiftSettings ?? []) + [.treatAllWarnings(as: .error)]
 }
